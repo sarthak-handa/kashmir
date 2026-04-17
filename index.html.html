@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kashmir Dream Trip – May 2026</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP for Advanced Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* Cinematic Kashmir Theme Variables */
+        :root {
+            --accent: #D4A373; /* Saffron tone */
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #FFFFFF;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: #050a0f; /* Deepest black/blue base */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: #050a0f;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            color: #FFFFFF;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Scroll Progress Bar */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Contextual Animations */
+        .snow {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                radial-gradient(4px 4px at 20px 30px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(3px 3px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(5px 5px at 90px 40px, rgba(255,255,255,0.7), transparent);
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: snowAnim 15s linear infinite;
+        }
+
+        @keyframes snowAnim {
+            0% { background-position: 0px 0px, 0px 0px, 0px 0px; }
+            100% { background-position: 200px 200px, 150px 400px, 300px 150px; }
+        }
+
+        .clouds-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1509803874385-db7c23652552?auto=format&fit=crop&w=2000&q=80') repeat-x center center;
+            opacity: 0.15;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            animation: drift 80s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes drift {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .water-reflection {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 40%;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: ripple 6s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 1;
+            mask-image: linear-gradient(to top, black, transparent);
+            -webkit-mask-image: linear-gradient(to top, black, transparent);
+        }
+
+        @keyframes ripple {
+            0% { transform: translateY(0) scaleY(1); opacity: 0.4; }
+            100% { transform: translateY(15px) scaleY(1.1); opacity: 0.8; }
+        }
+
+        /* Cinematic Full-Bleed Scenes */
+        .scene {
+            position: relative;
+            min-height: 100vh;
+            padding: 8rem 5%;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: -80px; /* Blend sections */
+            z-index: 2;
+        }
+
+        /* Depth Layers for blending scenes */
+        .scene::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 150px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            z-index: 1;
+        }
+        
+        .scene::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 150px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            z-index: 1;
+        }
+
+        /* Scene Color Gradients (Verified permanently active IDs) */
+        .scene-hero {
+            background-image: linear-gradient(rgba(10,20,30,0.3), rgba(10,20,30,0.7)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000');
+            margin-top: 0;
+            padding: 0 20px;
+        }
+        .scene-green {
+            background-image: linear-gradient(rgba(0,40,20,0.6), rgba(0,20,10,0.8)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000');
+        }
+        .scene-pine {
+            background-image: linear-gradient(rgba(10,30,40,0.6), rgba(5,15,20,0.8)), url('https://images.unsplash.com/photo-1448375240586-882707b88871?auto=format&fit=crop&q=80&w=2000');
+        }
+        .scene-snow {
+            background-image: linear-gradient(rgba(5,15,30,0.6), rgba(2,10,20,0.8)), url('https://images.unsplash.com/photo-1478201327076-1411540f1d53?auto=format&fit=crop&q=80&w=2000');
+        }
+        .scene-water {
+            background-image: linear-gradient(rgba(0,30,50,0.6), rgba(0,15,25,0.8)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=2000');
+        }
+        .scene-gold {
+            background-image: linear-gradient(rgba(40,25,10,0.6), rgba(20,10,5,0.8)), url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=2000');
+        }
+        .scene-mist {
+            background-image: linear-gradient(rgba(30,35,40,0.6), rgba(10,15,20,0.9)), url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&q=80&w=2000');
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 5;
+            transition: var(--transition);
+            height: 100%; /* Important: forces panel to stretch fully within the GSAP wrapper grid cell */
+        }
+
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.09);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .scene-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Typography Adjustments */
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 15, 20, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #FFFFFF;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Hero */
+        .hero-content { text-align: center; }
+        .hero h1 {
+            font-size: clamp(3.5rem, 7vw, 7rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+        }
+
+        .trip-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(15px);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 2rem;
+        }
+
+        .meta-item {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 500;
+        }
+
+        /* Overview Scene Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            width: 70px; height: 70px; line-height: 70px;
+            border-radius: 50%;
+        }
+
+        .glass-panel h3 { margin-bottom: 1rem; font-size: 1.4rem; font-weight: 500;}
+        .glass-panel p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+
+        /* Timeline Scene Transitions */
+        .timeline-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-container.reverse {
+            direction: rtl;
+        }
+        .timeline-container.reverse > * {
+            direction: ltr;
+        }
+
+        /* Draw a line down the middle of the screen connecting scenes */
+        .timeline-line {
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .day-node {
+            position: absolute;
+            left: 50%; top: 50%;
+            width: 24px; height: 24px;
+            background: #000;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .day-badge {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .timeline-content {
+            padding: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            z-index: 5;
+        }
+
+        .location {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .timeline-content ul { list-style: none; margin-bottom: 2.5rem; }
+        .timeline-content ul li {
+            position: relative; padding-left: 1.8rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 1rem;
+        }
+        .timeline-content ul li::before {
+            content: '✦'; position: absolute; left: 0; color: var(--accent); font-size: 1.1rem; line-height: 1.2;
+        }
+
+        /* Image Grids */
+        .image-collage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .img-wrap {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .img-wrap img {
+            width: 100%; height: 220px; object-fit: cover;
+            transition: var(--transition);
+            filter: brightness(0.85) contrast(1.1);
+            display: block;
+            background-color: rgba(255,255,255,0.05); /* Placeholder dark loading */
+        }
+
+        .img-wrap:hover img {
+            filter: brightness(1.1) contrast(1.1);
+            transform: scale(1.08);
+        }
+        
+        .img-large { grid-column: 1 / -1; height: 300px; }
+        
+        /* Map Customization */
+        .map-container {
+            border-radius: var(--radius-lg); overflow: hidden;
+            border: 1px solid var(--glass-border);
+            filter: invert(90%) hue-rotate(180deg) contrast(1.2); /* Dark mode map trick */
+            opacity: 0.8; transition: var(--transition);
+        }
+        .map-container:hover { opacity: 1; }
+        .map-container iframe { width: 100%; height: 450px; border: none; display: block; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 6rem 5%;
+            background: #050a0f;
+            color: #fff;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 900px) {
+            .nav-links { display: none; }
+            .timeline-container, .timeline-container.reverse {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .timeline-line { left: 20px; }
+            .day-node { left: 20px; top: 0; transform: translate(-50%, 0); }
+            .timeline-content { margin-left: 30px; }
+            .image-collage { margin-left: 30px; }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .hero h1 { font-size: 3rem; }
+            .timeline-content { padding: 2rem 1.5rem; margin-left: 15px;}
+            .timeline-line { left: 10px; }
+            .day-node { left: 10px; }
+            .image-collage { grid-template-columns: 1fr; margin-left: 15px;}
+            .img-wrap img { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress -->
+    <div id="progress"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">Kashmir Escape.</div>
+        <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#day-1">Itinerary</a>
+            <a href="#map">Map</a>
+            <a href="#tips">Tips</a>
+        </div>
+    </nav>
+
+    <!-- Scene 1: Hero (Mountain Peak) -->
+    <section class="scene scene-hero parallax">
+        <div class="clouds-overlay"></div>
+        <div class="scene-content hero-content">
+            <h1 class="gsap-hero">Kashmir Dream Trip</h1>
+            <p class="gsap-hero">A cinematic journey through Paradise on Earth, designed for comfort, luxury, and breathtaking views.</p>
+            
+            <div class="trip-meta gsap-hero">
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    13 May – 17 May 2026
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    3 Travelers
+                </div>
+                <div class="meta-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    Immersive Aesthetic
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 2: Overview (Green Valley) -->
+    <section id="overview" class="scene scene-green parallax">
+        <div class="scene-content">
+            <h2 class="section-title gsap-fade">Why this plan is perfect</h2>
+            <p class="section-subtitle gsap-fade">Specially tailored for parents and adults seeking majestic landscapes with uncompromising comfort and minimal physical strain.</p>
+
+            <div class="features-grid">
+                <!-- Wrapper for GSAP to prevent CSS transition conflict -->
+                <div class="gsap-card">
+                    <div class="glass-panel">
+                        <div class="feature-icon">🏔️</div>
+                        <h3>Zero-Trek Views</h3>
+                        <p>Experience the snow-capped peaks of Apharwat and Thajiwas directly via Gondola and base viewpoints. No exhausting hikes required.</p>
+                    </div>
+                </div>
+                <div class="gsap-card">
+                    <div class="glass-panel">
+                        <div class="feature-icon">🛥️</div>
+                        <h3>Luxurious Stays</h3>
+                        <p>Unwind in premium hotels and transition to a traditional yet highly luxurious houseboat on the serene, less-crowded Nigeen Lake.</p>
+                    </div>
+                </div>
+                <div class="gsap-card">
+                    <div class="glass-panel">
+                        <div class="feature-icon">☕</div>
+                        <h3>Relaxed Pacing</h3>
+                        <p>A well-spaced 5-day itinerary ensuring ample time for relaxation, tea overlooking the mountains, and smooth private transfers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 3: Day 1 (Pine Forest) -->
+    <section id="day-1" class="scene scene-pine parallax">
+        <div class="timeline-line"></div>
+        <div class="day-node"></div>
+        <div class="scene-content timeline-container">
+            <div class="timeline-content gsap-slide-left">
+                <span class="day-badge">Day 1 • May 13</span>
+                <h3>Arrival & The Pine Ascent</h3>
+                <div class="location">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Srinagar Airport ➔ Gulmarg
+                </div>
+                <ul>
+                    <li>Arrive at Srinagar Airport (~12:00 PM).</li>
+                    <li>Warm welcome by premium private chauffeur.</li>
+                    <li>Scenic 2-hour drive winding through beautiful pine forests to Gulmarg.</li>
+                    <li>Check-in to premium hotel. Spend the evening relaxing and acclimating.</li>
+                </ul>
+            </div>
+            <div class="image-collage gsap-slide-right">
+                <div class="img-wrap img-large"><img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=80&w=1600" alt="Drive to Gulmarg" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800" alt="Gulmarg Hotel Vibe" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800" alt="Kashmiri Kahwa Tea" loading="lazy"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 4: Day 2 (Snow Gulmarg) -->
+    <section id="day-2" class="scene scene-snow parallax">
+        <div class="snow"></div> <!-- Contextual Snow ONLY here -->
+        <div class="timeline-line"></div>
+        <div class="day-node"></div>
+        <div class="scene-content timeline-container reverse">
+            <div class="timeline-content gsap-slide-right">
+                <span class="day-badge">Day 2 • May 14</span>
+                <h3>Into the Clouds</h3>
+                <div class="location">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Gulmarg & Apharwat Peak
+                </div>
+                <ul>
+                    <li>Leisurely breakfast with mountain views.</li>
+                    <li>Iconic Gulmarg Gondola Ride (Phase 1 & Phase 2).</li>
+                    <li>Step out at Apharwat Peak for a pristine snow experience.</li>
+                    <li>Return to base for a cozy evening stroll around the biosphere.</li>
+                </ul>
+            </div>
+            <div class="image-collage gsap-slide-left">
+                <div class="img-wrap img-large"><img src="https://images.unsplash.com/photo-1517823382935-51bfcb0ec6bc?auto=format&fit=crop&q=80&w=1600" alt="Gulmarg Gondola" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&q=80&w=800" alt="Apharwat Snow Peak" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1455448972184-de647495d428?auto=format&fit=crop&q=80&w=800" alt="Gulmarg Landscape" loading="lazy"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 5: Day 3 (Water / Nigeen Lake) -->
+    <section id="day-3" class="scene scene-water parallax">
+        <div class="water-reflection"></div> <!-- Contextual Water effect -->
+        <div class="timeline-line"></div>
+        <div class="day-node"></div>
+        <div class="scene-content timeline-container">
+            <div class="timeline-content gsap-slide-left">
+                <span class="day-badge">Day 3 • May 15</span>
+                <h3>The Lake Retreat</h3>
+                <div class="location">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Gulmarg ➔ Srinagar (Nigeen Lake)
+                </div>
+                <ul>
+                    <li>Late morning transfer back to Srinagar.</li>
+                    <li>Check-in to a luxury houseboat on the calm, exclusive Nigeen Lake.</li>
+                    <li>Experience traditional hospitality and carved walnut wood interiors.</li>
+                    <li>Watch the sunset over the lake from the houseboat deck.</li>
+                </ul>
+            </div>
+            <div class="image-collage gsap-slide-right">
+                <div class="img-wrap img-large"><img src="https://images.unsplash.com/photo-1439405326854-014607f694d7?auto=format&fit=crop&q=80&w=1600" alt="Luxury Houseboat" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?auto=format&fit=crop&q=80&w=800" alt="Relaxing by the lake" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=800" alt="Houseboat Interiors" loading="lazy"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 6: Day 4 (Gold Mountains / Sonmarg) -->
+    <section id="day-4" class="scene scene-gold parallax">
+        <div class="timeline-line"></div>
+        <div class="day-node"></div>
+        <div class="scene-content timeline-container reverse">
+            <div class="timeline-content gsap-slide-right">
+                <span class="day-badge">Day 4 • May 16</span>
+                <h3>The Meadow of Gold</h3>
+                <div class="location">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Day Trip to Sonmarg
+                </div>
+                <ul>
+                    <li>Scenic drive alongside the Sindh River to Sonmarg.</li>
+                    <li>Visit the base of Thajiwas Glacier. Pony rides available for zero-walking access.</li>
+                    <li>Enjoy a riverside picnic or lunch at a premium resort.</li>
+                    <li>Return to your cozy houseboat in Srinagar by late afternoon.</li>
+                </ul>
+            </div>
+            <div class="image-collage gsap-slide-left">
+                <div class="img-wrap img-large"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=1600" alt="Sonmarg Valley" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&q=80&w=800" alt="Thajiwas Glacier Base" loading="lazy"></div>
+                <div class="img-wrap"><img src="https://images.unsplash.com/photo-1504457047772-27faf1c00561?auto=format&fit=crop&q=80&w=800" alt="Sindh River" loading="lazy"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 7: Day 5 (Mist / Farewell) -->
+    <section id="day-5" class="scene scene-mist parallax">
+        <div class="timeline-line" style="background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);"></div>
+        <div class="day-node"></div>
+        <div class="scene-content timeline-container">
+            <div class="timeline-content gsap-slide-left">
+                <span class="day-badge">Day 5 • May 17</span>
+                <h3>Morning Mist & Farewell</h3>
+                <div class="location">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Nigeen Lake ➔ Airport
+                </div>
+                <ul>
+                    <li>Early morning tranquil Shikara ride. Watch the floating vegetable market.</li>
+                    <li>Final Kashmiri breakfast on the houseboat.</li>
+                    <li>Optional quick stop for local handicraft shopping (Pashmina/Saffron).</li>
+                    <li>Smooth transfer to Srinagar Airport for departure.</li>
+                </ul>
+            </div>
+            <div class="image-collage gsap-slide-right">
+                <div class="img-wrap img-large"><img src="https://images.unsplash.com/photo-1445264718234-a623be589d37?auto=format&fit=crop&q=80&w=1600" alt="Morning Shikara Ride" loading="lazy"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Scene -->
+    <section id="map" class="scene scene-pine parallax">
+        <div class="scene-content">
+            <h2 class="section-title gsap-fade">Your Journey Charted</h2>
+            <p class="section-subtitle gsap-fade">Navigating the jewel of the north.</p>
+            
+            <!-- Wrapper for GSAP to prevent CSS transition conflict -->
+            <div class="gsap-fade">
+                <div class="map-container glass-panel" style="padding: 1rem;">
+                    <iframe 
+                        src="https://maps.google.com/maps?q=Srinagar,+Jammu+and+Kashmir&t=&z=9&ie=UTF8&iwloc=&output=embed" 
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Scene -->
+    <section id="tips" class="scene scene-hero parallax">
+        <div class="scene-content">
+            <h2 class="section-title gsap-fade">Essential Travel Notes</h2>
+            <p class="section-subtitle gsap-fade">A few tips to ensure your parents and you have the most comfortable experience.</p>
+
+            <div class="features-grid">
+                <!-- Wrapper for GSAP to prevent CSS transition conflict -->
+                <div class="gsap-card">
+                    <div class="glass-panel">
+                        <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M4.93 4.93l1.41 1.41"></path><path d="M17.66 17.66l1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="M6.34 17.66l-1.41 1.41"></path><path d="M19.07 4.93l-1.41 1.41"></path></svg> Weather in May</h4>
+                        <p>Days are pleasantly warm (15°C - 22°C), but nights in Gulmarg get chilly. Layering is key. A light jacket for Srinagar and a heavy jacket/thermals for the Gondola phase 2 are essential.</p>
+                    </div>
+                </div>
+                <div class="gsap-card">
+                    <div class="glass-panel">
+                        <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="M4 6v6"></path><path d="M20 6v6"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg> Luggage & Mobility</h4>
+                        <p>Houseboat access requires stepping into a Shikara. Pack one overnight bag for the houseboat to avoid carrying heavy suitcases across the lake. Minimal walking involved.</p>
+                    </div>
+                </div>
+                <div class="gsap-card">
+                    <div class="glass-panel">
+                        <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Connectivity</h4>
+                        <p>Only postpaid mobile connections (Jio, Airtel, BSNL) work in Kashmir due to security regulations. Ensure at least one member has a postpaid SIM before traveling.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h2>Kashmir Dream Trip</h2>
+        <p style="color: var(--accent); margin: 0.5rem 0;">13 May – 17 May 2026 • 3 Travelers</p>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.5;">Crafted for beautiful cinematic memories.</p>
+    </footer>
+
+    <!-- GSAP Animation Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Progress & Navbar styling
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                const scroll = window.scrollY;
+                const height = document.body.scrollHeight - window.innerHeight;
+                document.getElementById('progress').style.width = (scroll / height) * 100 + '%';
+                
+                if (scroll > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Register GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero Animations
+            gsap.from(".gsap-hero", {
+                y: 50, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power3.out", delay: 0.2
+            });
+
+            // Generic Fade Elements (Headers, Subtitles)
+            gsap.utils.toArray('.gsap-fade').forEach(elem => {
+                gsap.from(elem, {
+                    scrollTrigger: { trigger: elem, start: "top 80%" },
+                    y: 30, opacity: 0, duration: 1.2, ease: "power2.out"
+                });
+            });
+
+            // Cards Stagger (Overview & Tips)
+            gsap.utils.toArray('.features-grid').forEach(grid => {
+                const cards = grid.querySelectorAll('.gsap-card');
+                gsap.from(cards, {
+                    scrollTrigger: { trigger: grid, start: "top 80%" },
+                    y: 50, opacity: 0, duration: 1, stagger: 0.2, ease: "power2.out"
+                });
+            });
+
+            // Cinematic Scene Transitions (Slide in from sides)
+            gsap.utils.toArray('.gsap-slide-left').forEach(elem => {
+                gsap.from(elem, {
+                    scrollTrigger: { trigger: elem, start: "top 80%" },
+                    x: -80, opacity: 0, duration: 1.2, ease: "power3.out"
+                });
+            });
+
+            gsap.utils.toArray('.gsap-slide-right').forEach(elem => {
+                gsap.from(elem, {
+                    scrollTrigger: { trigger: elem, start: "top 80%" },
+                    x: 80, opacity: 0, duration: 1.2, ease: "power3.out"
+                });
+            });
+            
+            // Image internal parallax/pop
+            gsap.utils.toArray('.image-collage').forEach(grid => {
+                const images = grid.querySelectorAll('.img-wrap');
+                gsap.from(images, {
+                    scrollTrigger: { trigger: grid, start: "top 80%" },
+                    scale: 0.9, opacity: 0, duration: 1, stagger: 0.15, ease: "back.out(1.2)"
+                });
+            });
+        });
+    </script>
+</body>
+</html>
